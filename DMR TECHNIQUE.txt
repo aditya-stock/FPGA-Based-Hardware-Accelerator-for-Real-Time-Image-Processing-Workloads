@@ -1,0 +1,116 @@
+module fir_filter #(parameter N = 4) (
+    input clk,
+    input rst,
+    input signed [15:0] x_in,
+    output reg signed [15:0] y_out
+);
+    reg signed [15:0] coeffs [0:N-1];  
+    reg signed [15:0] shift_reg [0:N-1]; 
+    integer i;
+
+    initial begin
+        coeffs[0] = 16'h0001;
+        coeffs[1] = 16'h0002;
+        coeffs[2] = 16'h0003;
+        coeffs[3] = 16'h0004;
+    end
+
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            for (i = 0; i < N; i = i + 1)
+                shift_reg[i] <= 0;
+            y_out <= 0;
+        end else begin
+            for (i = N-1; i > 0; i = i - 1)
+                shift_reg[i] <= shift_reg[i-1];
+            shift_reg[0] <= x_in;
+
+            y_out = 0;
+            for (i = 0; i < N; i = i + 1)
+                y_out = y_out + shift_reg[i] * coeffs[i];
+        end
+    end
+endmodule
+
+
+module dmr_fir_filter (
+    input clk,
+    input rst,
+    input signed [15:0] x_in,
+    output signed [15:0] y_out,
+    output fault_detected
+);
+    wire signed [15:0] y1, y2;
+
+    fir_filter fir1 (.clk(clk), .rst(rst), .x_in(x_in), .y_out(y1));
+    fir_filter fir2 (.clk(clk), .rst(rst), .x_in(x_in), .y_out(y2));
+
+    assign fault_detected = (y1 != y2);
+    assign y_out = y1;
+
+endmodule
+
+
+
+
+
+
+
+test bench
+`timescale 1ns / 1ps
+
+module tb_dmr_fir_filter;
+    reg clk;
+    reg rst;
+    reg signed [15:0] x_in;
+    wire signed [15:0] y_out;
+    wire fault_detected;
+
+    dmr_fir_filter uut (
+        .clk(clk),
+        .rst(rst),
+        .x_in(x_in),
+        .y_out(y_out),
+        .fault_detected(fault_detected)
+    );
+
+    // Clock Generation (10ns period)
+    always #5 clk = ~clk;
+
+    initial begin
+        // Enable waveform dumping
+        $dumpfile("dump.vcd");
+        $dumpvars(0, tb_dmr_fir_filter);
+
+        // Initialize signals
+        clk = 0;
+        rst = 1;
+        x_in = 0;
+
+        // Reset the system
+        #10 rst = 0;
+        
+        // Apply test inputs
+        #10 x_in = 16'd1;
+        #10 x_in = 16'd2;
+        #10 x_in = 16'd3;
+        #10 x_in = 16'd4;
+        #10 x_in = 16'd5;
+        #10 x_in = 16'd6;
+        #10 x_in = 16'd7;
+        #10 x_in = 16'd8;
+
+        // Inject a fault
+        force uut.fir1.y_out = 16'hAAAA;
+        #10 x_in = 16'd9;
+        release uut.fir1.y_out; // Remove fault
+
+        #50 $finish;
+    end
+
+    // Monitor output changes
+    initial begin
+        $monitor("Time=%0t | x_in=%d | y_out=%d | Fault=%b", $time, x_in, y_out, fault_detected);
+    end
+
+endmodule

@@ -1,0 +1,60 @@
+ 
+****************************************
+Report : power
+        -analysis_effort low
+Design : ram
+Version: V-2023.12-SP5-2
+Date   : Wed Feb 19 10:35:08 2025
+****************************************
+
+
+Library(s) Used:
+
+    saed32hvt_ff0p85v25c (File: /home/student/24MVD1034/1KB_RAM/saed32hvt_ff0p85v25c.db)
+    saed32lvt_ff0p85v25c (File: /home/student/24MVD1034/1KB_RAM/saed32lvt_ff0p85v25c.db)
+
+
+Operating Conditions: ff0p85v25c   Library: saed32hvt_ff0p85v25c
+Wire Load Model Mode: enclosed
+
+Design        Wire Load Model            Library
+------------------------------------------------
+ram                    140000            saed32hvt_ff0p85v25c
+
+
+Global Operating Voltage = 0.85 
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000ff
+    Time Units = 1ns
+    Dynamic Power Units = 1uW    (derived from V,C,T units)
+    Leakage Power Units = 1pW
+
+
+Attributes
+----------
+i - Including register clock pin internal power
+
+
+  Cell Internal Power  =  -14.2340 mW  (100%)
+  Net Switching Power  =  24.5961 uW    (0%)
+                         ---------
+Total Dynamic Power    =  10.5094 mW  (100%)
+
+Cell Leakage Power     = 250.1342 mW
+
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network  -9.1888e+03            0.0000            0.0000        -9.1888e+03
+                                                                                 (  -7.60%)  i
+register       -1.4229e+00        8.3721e-02        3.9667e+10        3.9665e+04 (  32.80%)
+sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
+combinational  -4.3743e+01           24.5134        9.0468e+10        9.0448e+04 (  74.80%)
+--------------------------------------------------------------------------------------------------
+Total          -9.2340e+03 uW        24.5971 uW     1.3013e+11 pW     1.2092e+05 uW
+1

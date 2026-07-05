@@ -1,0 +1,58 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : ram
+Version: V-2023.12-SP5-2
+Date   : Wed Feb 19 10:35:08 2025
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: ff0p85v25c   Library: saed32hvt_ff0p85v25c
+Wire Load Model Mode: enclosed
+
+  Startpoint: data_in[7] (input port clocked by CLK_100M)
+  Endpoint: ram_block_reg[110][7]
+            (rising edge-triggered flip-flop clocked by CLK_100M)
+  Path Group: CLK_100M
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ram                140000                saed32hvt_ff0p85v25c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock CLK_100M (rise edge)               0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     1.00       1.00 r
+  data_in[7] (in)                          0.00       1.00 r
+  U14059/Y (NBUFFX2_LVT)                   0.51       1.51 r
+  U11708/Y (NBUFFX2_LVT)                   0.51       2.03 r
+  U11624/Y (NBUFFX2_LVT)                   0.51       2.54 r
+  U11514/Y (NBUFFX2_LVT)                   0.51       3.05 r
+  U11563/Y (NBUFFX2_LVT)                   0.52       3.57 r
+  U11625/Y (NBUFFX2_LVT)                  30.67      24.24 r
+  U11561/Y (NBUFFX2_LVT)                   0.50      34.74 r
+  U30082/Y (AO22X1_HVT)                   30.39      35.13 r
+  RBL_DMR[110][7]/D (DFFX1_HVT)            0.10      45.24 r
+  data arrival time                                  35.24
+
+  clock CLK (rise edge)                    10.00      10.00
+  clock network delay (ideal)              0.00       10.00
+  clock uncertainty                       -0.01       9.99
+  RBL_DMR[110][7]/CLK (DFFX1_HVT)
+                                           0.00       9.99 r
+  library setup time                      -0.03       9.96
+  data required time                                  9.96
+  -----------------------------------------------------------
+  data required time                                  9.96
+  data arrival time                                  12.24
+  -----------------------------------------------------------
+  slack (VIOLATED)                                  -55.28
+
+
+1
